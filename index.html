@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        iframe {
+            width: 100%;
+            height: 80vh;
+            border: none;
+        }
+        iframe #City{
+            pointer-events: none !important;
+            background-color: gray !important;
+        }
+        iframe #City-input{
+            pointer-events: none !important;
+            background-color: gray !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <iframe role="presentation" 
+                src="https://app.powerbi.com/rdlEmbed?reportId=6f8933bc-3c8e-41d7-84ba-152058c9b23a&autoAuth=true&ctid=fe6a2362-9b42-4ec8-8684-3fb1a542df8c&experience=power-bi" 
+                allowFullScreen="true">
+        </iframe> -->
+        <div id="reportContainer"></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+         function loadReport() {
+            $.ajax({
+                    url: 'https://localhost:7186/api/Report/embedUrl/',
+                    type: 'GET',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        var iframe = document.createElement('iframe');
+                        iframe.width = '800';
+                        iframe.height = '600';
+                        iframe.src = data.embedUrl;
+                        iframe.frameBorder = '0';
+                        iframe.allowFullscreen = true;
+
+                        $('#reportContainer').append(iframe);
+                        // Add an event listener for when the iframe has fully loaded
+                        // iframe.onload = function() {
+                        var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+                        //     // Assuming the dropdown has an id or some unique identifier
+                        //     var cityDropdown = iframeDocument.getElementById('City'); // Change 'cityDropdownId' to the actual id of the dropdown
+                        //     if (cityDropdown) {
+                        //         cityDropdown.style.pointerEvents="none";
+                        //     }
+                        // };
+                        console.log(iframe);
+                        iframe.onload = function(data) {
+                           
+                        };
+                    },
+                });
+        }
+        loadReport();
+
+        // Add this script inside the iframe content
+        // window.addEventListener('message', function(event) {
+        //     if (event.data.type === 'disableDropdown') {
+        //         var cityDropdown = document.getElementById(event.data.dropdownId);
+        //         if (cityDropdown) {
+        //             cityDropdown.style.pointerEvents = "none";
+        //         }
+        //     }
+        // });
+
+    </script>
+
+</body>
+</html>
